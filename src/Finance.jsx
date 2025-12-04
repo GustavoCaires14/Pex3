@@ -174,7 +174,7 @@ const Table = styled.table`
 
 // --- LOGIC (App Component) ---
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001/api/transactions";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
 function Finance() {
   const [transactions, setTransactions] = useState([]);
@@ -223,7 +223,9 @@ function Finance() {
 
   const fetchTransactions = async () => {
     try {
-      const res = await axios.get(API_URL); // <-- Usa a variável
+      // const res = await axios.get(API_URL); // <-- Usa a variável
+      // setTransactions(res.data);
+      const res = await axios.get(`${API_BASE_URL}/api/transactions`); // <-- Adiciona a rota aqui
       setTransactions(res.data);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -243,7 +245,8 @@ function Finance() {
 
   try {
     // await axios.post("http://localhost:3001/api/transactions", newTransaction);
-    await axios.post(API_URL, newTransaction);
+    await axios.post(`${API_BASE_URL}/api/transactions`, newTransaction);
+    // await axios.post(API_URL, newTransaction);
     fetchTransactions(); // Refresh list
     setDesc("");
     setAmount("");
@@ -254,7 +257,8 @@ function Finance() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_URL}/${id}}`);
+      await axios.delete(`${API_BASE_URL}/api/transactions/${id}`);
+      // await axios.delete(`${API_URL}/${id}}`);
       fetchTransactions();
     } catch (error) {
       console.error(error);
